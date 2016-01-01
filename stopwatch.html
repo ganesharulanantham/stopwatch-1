@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>stopwatch</title>
+    <style>
+    body {
+        width: 300px;
+        height: 170px;
+        text-align: center;
+    }
+    .para {
+        width: 280px;
+        line-height: 100px;
+        margin: 0 auto 10px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 42px;
+        color: #fff;
+        background: #333;
+    }
+    button {
+        width: 136px;
+        height: 42px;
+        font-size: 30px;
+        border: 0;
+        border-radius: 8px;
+        color: #333;
+        background: #3e3;
+    }
+    .pause {
+        color: #fff;
+        background: #369;
+    }
+    .reset {
+        background: #ee2;
+    }
+    </style>
+</head>
+
+<body>
+    <p class="para" id="counting"></p>
+    <button id="start">Start</button>
+    <button class="pause" id="pause">Pause</button>
+    <button class="reset" id="reset">Reset</button>
+
+    <script>
+    var oCounting = document.getElementById('counting');
+    var oStart = document.getElementById('start');
+    var oReset = document.getElementById('reset');
+    var oBody = document.getElementsByTagName('body')[0];
+    var oPause = document.getElementById('pause');
+    var timer1 = null;
+    var s = 0,
+        m = 0,
+        h = 0,
+        ss = 0;
+
+    function startCounting(el) {
+        timer1 && clearInterval(timer1);
+        timer1 = setInterval(function() {
+            // how many ms an hour ? 60 * 60 * 1000
+            // how many ms a minute ? 60 * 1000
+            // how many ms a second ? 1000
+            ss++;
+
+            if (ss > 9) {
+                s++;
+                ss = 0;
+            }
+            if (s > 59) {
+                m++;
+                s = 0;
+            }
+            if (m > 59) {
+                h++;
+                m = 0;
+            }
+            var ssStr = addZero(ss);
+            var sStr = addZero(s);
+            var mStr = addZero(m);
+            var hStr = addZero(h);
+            el.innerHTML = hStr + ':' + mStr + ':' + sStr + ' ' + ssStr;
+        }, 100);
+    }
+
+    function init() {
+        ss = s = m = h = 0;
+        timer1 || clearInterval(timer1);
+        oCounting.innerHTML = '00:00:00 00';
+        oPause.style.display = 'none';
+        oStart.style.display = '';
+        // oCounting.style.backgroundColor = '#333';
+        // oCounting.style.color = '#fff';
+
+    }
+
+    function addZero(t) {
+        return t < 10 ? '0' + t : t;
+    }
+
+    oBody.onload = function() {
+        init();
+    };
+    oReset.onclick = function() {
+        init();
+    };
+
+    oStart.onclick = function() {
+        startCounting(oCounting);
+        this.style.display = 'none';
+        oPause.style.display = '';
+    };
+    oPause.onclick = function() {
+        clearInterval(timer1);
+        this.style.display = 'none';
+        oStart.style.display = '';
+    };
+    </script>
+</body>
+
+</html>
